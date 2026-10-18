@@ -1,10 +1,11 @@
-
-# Qt build output
+# Build output
+build/
 BidSphere/build/
-BidSphere/.qtcreator/
 
-# Qt Creator personal settings
-BidSphere/CMakeLists.txt.user*
+# Qt Creator generated files and personal settings
+.qtcreator/
+BidSphere/.qtcreator/
+CMakeLists.txt.user*
 *.user
 *.user.*
 
