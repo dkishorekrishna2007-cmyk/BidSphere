@@ -1,0 +1,21 @@
+
+# Qt build output
+BidSphere/build/
+BidSphere/.qtcreator/
+
+# Qt Creator personal settings
+BidSphere/CMakeLists.txt.user*
+*.user
+*.user.*
+
+# Compiled files
+*.o
+*.obj
+*.exe
+*.dll
+*.a
+*.lib
+
+# Operating system files
+.DS_Store
+Thumbs.db
