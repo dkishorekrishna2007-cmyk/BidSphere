@@ -1,91 +1,143 @@
 # BidSphere — Online Auction and Bidding System
 
-## 1. Project Overview
+BidSphere is a **C++17 desktop application** for creating auction listings and placing bids. Developed as an Object-Oriented Programming (OOP) course project, it uses Qt 6 Widgets for its graphical user interface.
 
-BidSphere is a database-driven Online Auction and Bidding System developed in C++17 for an Object-Oriented Programming (OOP) course project.
+**Project status:** Core GUI workflow implemented and manually tested, including auction and highest-bid persistence across application restarts.
 
-The system is intended to allow users to participate in auctions, create auction listings, place bids, and manage auction outcomes through a graphical user interface.
+## Features
 
-**Project status:** Initial setup and Qt GUI starter project.
+- **User registration and login** with buyer/seller role selection.
+- **Seller workflow:** Create auction listings with an item name and starting price.
+- **Buyer workflow:** View available auctions and place bids.
+- **Bid validation:** Accepted bids update the highest bid; bids that do not exceed the current highest bid are rejected.
+- **File-based persistence:** User and auction data are saved locally and loaded at startup.
+- **GUI:** Screens for authentication, auction listing, auction creation, and bidding.
 
-## 2. Technology Stack
+## Technology Stack
 
-- **Programming language:** C++17
-- **GUI framework:** Qt 6 Widgets
+- **Language:** C++17
+- **GUI:** Qt 6 Widgets
 - **Build system:** CMake
+- **IDE:** Qt Creator or another CMake-compatible IDE
 - **Version control:** Git and GitHub
-- **IDE:** Qt Creator or Visual Studio Code
-- **Database:** To be decided by the team
+- **Persistence:** Local delimited text files; no external database is configured.
 
-## 3. Project Structure
+## Project Structure
 
 ```text
 BidSphere/
-├── .gitignore
 ├── CMakeLists.txt
 ├── README.md
 ├── main.cpp
 ├── mainwindow.cpp
 ├── mainwindow.h
 ├── mainwindow.ui
-├── include/       # Shared header files
-├── src/           # C++ implementation files
-├── tests/         # Tests
-└── docs/          # Design diagrams and documentation
+├── include/
+│   ├── Auction.hpp
+│   ├── User.h
+│   ├── UserManager.h
+│   └── bidding.hpp
+├── src/
+│   ├── Auction.cpp
+│   ├── User.cpp
+│   ├── UserManager.cpp
+│   └── bidding.cpp
+└── tests/
+    ├── smoke_test.cpp
+    └── test_user.cpp
 ```
 
-Build directories and IDE-specific configuration files are generated locally and should not be committed.
+## Prerequisites
 
-## 4. Prerequisites
-
-To build the current Qt application, install:
+Install the following:
 
 - Git
 - Qt 6 with Qt Widgets
-- Qt Creator
-- A compatible C++ compiler and CMake
+- A C++17-compatible compiler matching your Qt kit
+- CMake
 
-On Windows, use the Qt kit and compiler selected during the Qt installation. Team members should not assume that every compiler is binary-compatible with every Qt build.
+The project has been built using **Qt 6.12.0 MinGW 64-bit** and its matching MinGW compiler on Windows.
 
-## 5. Getting Started
+## Getting Started
 
-Clone the repository:
+### 1. Clone the repository
 
-```bash
+```cmd
 git clone https://github.com/dkishorekrishna2007-cmyk/BidSphere.git
 cd BidSphere
 ```
 
-Open `CMakeLists.txt` in Qt Creator.
+### 2. Build using Qt Creator
 
-Select the compatible Qt 6 MinGW 64-bit kit, configure the project, and then build and run it.
+1. Open `CMakeLists.txt` in Qt Creator.
+2. Select a compatible Qt 6 kit.
+3. Configure the project.
+4. Build the `BidSphere` target.
+5. Run the application.
 
-## 6. Team Responsibilities
+### 3. Build using Windows Command Prompt
 
-- **Member 1 — User Management:** User, Buyer, Seller, and UserManager.
-- **Member 2 — Auction Management:** Auction and AuctionManager.
-- **Member 3 — Bidding Engine:** Bid and BiddingEngine.
-- **D Kishore Krishna 4 — GUI, Storage, and Integration:** Qt interface, persistence, integration, testing, documentation, and packaging.
+The following commands match the tested Qt installation paths. Adjust them if Qt is installed elsewhere.
 
-The exact interfaces and database design must be agreed upon by the team before implementation begins.
+```cmd
+set "PATH=C:\Qt\6.12.0\mingw_64\bin;C:\Qt\Tools\mingw1310_64\bin;C:\Qt\Tools\CMake_64\bin;%PATH%"
+cmake -S . -B build\Desktop_Qt_6_12_0_MinGW_64_bit_Debug -DCMAKE_PREFIX_PATH=C:\Qt\6.12.0\mingw_64
+cmake --build build\Desktop_Qt_6_12_0_MinGW_64_bit_Debug --config Debug
+```
 
-## 7. Collaboration Guidelines
+Run the executable from CMD so Qt can find its runtime DLLs:
+
+```cmd
+set "PATH=C:\Qt\6.12.0\mingw_64\bin;C:\Qt\Tools\mingw1310_64\bin;%PATH%"
+build\Desktop_Qt_6_12_0_MinGW_64_bit_Debug\BidSphere.exe
+```
+
+## Data Persistence
+
+The application stores local data in:
+
+- `bidsphere_users.dat`
+- `bidsphere_auctions.dat`
+
+These files are placed beside the running executable. Keep them to retain local user and auction data between launches, and back them up before manually editing or deleting them.
+
+### Current limitations
+
+- Passwords are stored in plaintext. This implementation is intended for coursework, not production use with real credentials.
+- Bidder history is session-only and does not persist across restarts.
+- Auction duration is fixed at 24 hours.
+- The GUI does not currently provide a close-auction control.
+- Persistence is file-based; no database server or schema is configured.
+
+## Verification
+
+The following core workflow has been manually tested:
+
+- Seller registration and login
+- Auction creation
+- Buyer registration and login
+- Valid bid accepted
+- Lower bid rejected
+- Auction remains visible after restarting
+- Highest bid remains saved after restarting
+
+Test source files are included in `tests/`. They are separate from the GUI application's CMake target.
+
+## Object-Oriented Design
+
+- **`User` and `UserManager`:** User data, registration, login, and role lookup.
+- **`Auction` and `AuctionManager`:** Auction details and auction management.
+- **`Bidder`:** Bid submission and validation against the current highest bid.
+- **Qt main window:** User-facing screens and coordination between GUI actions and application logic.
+
+## Collaboration Guidelines
 
 1. Pull the latest changes before starting work.
-2. Create a separate branch for each task or feature.
-3. Avoid committing generated build files or personal IDE settings.
-4. Do not edit another member's module without coordinating first.
-5. Agree on class interfaces and shared data structures before integrating modules.
-6. Test changes locally before pushing.
-7. Open a pull request and request a teammate's review before merging into `main`.
+2. Coordinate changes to shared class interfaces.
+3. Build and test locally before committing.
+4. Avoid committing build output, executable files, local data files, or personal IDE settings.
+5. Use descriptive commit messages and push tested changes.
 
-## 8. Current Status
+## Repository
 
-- [x] C++ compiler tested
-- [x] Qt starter application builds and runs
-- [x] Git repository initialized and connected to GitHub
-- [x] Initial repository structure created
-- [ ] Database and schema finalized
-- [ ] Module interfaces finalized
-- [ ] Application features implemented
-- [ ] Integration and testing completed
+[GitHub — BidSphere](https://github.com/dkishorekrishna2007-cmyk/BidSphere)
